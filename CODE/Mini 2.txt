@@ -1,0 +1,57 @@
+int u[6]={2,3,4,11,12,13};
+int l[6]={A5,A4,A3,A2,A1,A0};
+int t[6];
+int i,n,o,fg;
+long readUltrasonicDistance(int triggerPin, int echoPin)
+{
+  pinMode(triggerPin, OUTPUT);
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  pinMode(echoPin, INPUT);
+  return pulseIn(echoPin, HIGH,19500UL);
+}
+void setup()
+{
+  for(i=0;i<6;i++)
+  	pinMode(l[i],OUTPUT);
+}
+void glow(int n)
+{
+  digitalWrite(l[n], HIGH);
+  digitalWrite(l[n+1], HIGH);
+  digitalWrite(l[n+2], HIGH);
+}
+void fog(int n)
+{
+  digitalWrite(l[n-1], HIGH);
+  digitalWrite(l[n], HIGH);
+  digitalWrite(l[n+1], HIGH);
+}
+void clr()
+{
+  	for(i=0;i<6;i++)
+  	digitalWrite(l[i], LOW);
+}
+void loop()
+{
+ fg=digitalRead(7);
+  for(i=0;i<6;i++)
+  {
+    t[i] = 0.01723 * readUltrasonicDistance(u[i],u[i]);
+  	if(fg==0&&t[i]<335&&t[i]!=0)
+    {
+      glow(i);
+ 	  break;
+    }  
+    if(fg==1&&t[i]<335&&t[i]!=0)
+    {
+      fog(i);
+ 	  break;
+    }
+  }
+  delay(10);
+  clr();
+}

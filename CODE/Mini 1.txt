@@ -1,0 +1,45 @@
+int t1,t2;
+int u1=10;
+int u2=5;
+int l1=9;
+int l2=6;
+long readUltrasonicDistance(int triggerPin, int echoPin)
+{
+  pinMode(triggerPin, OUTPUT);
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  pinMode(echoPin, INPUT);
+  return pulseIn(echoPin, HIGH);
+}
+void setup()
+{
+  pinMode(l1,OUTPUT);
+  pinMode(l2,OUTPUT);
+}
+void loop()
+{
+  t1 = 0.01723 * readUltrasonicDistance(10,10);
+  t2 = 0.01723 * readUltrasonicDistance(5, 5);
+  if(t1<336)
+  {
+  	for(;t2>335;)
+    {
+    	digitalWrite(l2, HIGH);
+  		t2 = 0.01723 * readUltrasonicDistance(5, 5);
+    }
+    digitalWrite(l2, LOW);
+  }  
+  else if(t2<336)
+  {
+  	for(;t1>335;)
+    {
+    	digitalWrite(l1, HIGH);
+  		t1 = 0.01723 * readUltrasonicDistance(10, 10);
+    }
+    digitalWrite(l1, LOW);
+  }
+  delay(500);
+}

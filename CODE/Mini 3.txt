@@ -1,0 +1,43 @@
+int a[4][3]={{4,3,2},{5,6,7},{8,9,10},{11,12,13}};
+int ti,t[3],i,j;
+long readUltrasonicDistance(int triggerPin, int echoPin)
+{
+  pinMode(triggerPin, OUTPUT);
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  pinMode(echoPin, INPUT);
+  return pulseIn(echoPin, HIGH,19500UL);
+}
+void setup()
+{
+  Serial.begin(9600);
+}
+void display(int t,int dir)
+{
+	Serial.print(t);
+  	Serial.print('\t');
+ 	Serial.print(dir);
+ 	Serial.print('\n');
+  	delay(100);
+}
+void loop()
+{
+  for(i=0;i<4;i++)
+  {
+  	ti=0;
+	for(j=0;j<3;j++)
+	{
+	  t[j] = 0.01723 * readUltrasonicDistance(a[i][j],a[i][j]);
+	  if(t[j]<335&&t[j]!=0)
+ 	  {
+  	    ti++;
+  	  }
+      else
+      break;
+	}
+  	display(ti,i);
+  }
+}
